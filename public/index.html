@@ -1,8 +1,22 @@
-<html>
-<head>
-	<title>New Page to test.</title>
-</head>
-<body>
-	<h1>AngularJS App on nodeJS</h1>
-</body>
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html ng-app="shippableApp">
+    <head>
+        <title>Shippable Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body ng-controller="AppCtrl">
+        <div ng-bind="appName"></div>
+        <input ng-model="repoName"/>
+        <input type="button" value="Show Issues" ng-click="showIssues()"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+        <script src="js/app.js" type="text/javascript"></script>
+        <script src="js/controllers.js" type="text/javascript"></script>
+        <script src="js/services.js" type="text/javascript"></script>
+    </body>
 </html>
