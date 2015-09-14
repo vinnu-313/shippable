@@ -15,7 +15,7 @@ app.get('/', function(request, response) {
 });
 
 app.get('/cool', function(request, response) {
-  response.send(cool());
+  response.render('public/index.html');
 });
 
 app.listen(app.get('port'), function() {
