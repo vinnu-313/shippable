@@ -2,7 +2,7 @@
 
 angular.module('shippableApp.controllers', ['shippableApp.services'])
         .controller('AppCtrl', ['$scope', 'ShippableService', function ($scope, ShippableService) {
-                $scope.appName = "Shippable";
+                $scope.appName = "Shippable screening test ";
                 $scope.showIssues = function () {
                     if ($scope.repoName.indexOf('github.com') === -1) {
                         alert("Not a github repo");
