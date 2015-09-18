@@ -3,11 +3,11 @@
 angular.module('shippableApp.services', [])
         .factory('ShippableService', ['$http', function ($http) {
                 return {
-                    fetchIssues: function (owner, repo) {
+                    fetchIssues: function (owner, repo, page) {
                         return $http({
                             method: 'GET',
-//                           https://github.com/Shippable/support
-                            url: 'https://api.github.com/repos/' + owner + '/' + repo + '/issues'
+                            url: 'https://api.github.com/search/issues?q=state:open+repo:'+repo+'+user:'+owner+'&per_page=100&page='+page
+                            // url: 'https://api.github.com/repos/' + owner + '/' + repo + '/issues'
                         });
                     },
                     filter24Hours: function (issues) {
