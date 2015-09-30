@@ -1,13 +1,33 @@
 'use strict';
 
 angular.module('shippableApp.services', [])
-        .factory('ShippableService', ['$http', function ($http) {
+        .factory('ShippableService', ['$http', 'clientId', 'clientSecret', function ($http, clientId, clientSecret) {
                 return {
+                    authorize : function () {
+                        return $http({
+                            url: 'https://api.github.com/authorizations/clients/'+clientId,
+                            method: 'PUT', 
+                            data: {
+                              "client_secret": clientSecret,
+                              "scopes": [
+                                "public_repo"
+                              ],
+                              "note": "Shippabe App"
+                            }
+                        });
+                    },
+                    getIssueCount : function(owner, repo, page) {
+                        return $http({
+                            method: 'GET',
+                            url: 'https://api.github.com/search/issues?q=state:open+repo:'+repo+'+user:'+owner+'&per_page=30&page='+page
+                            // url: 'https://api.github.com/repos/' + owner + '/' + repo + '/issues'
+                        });
+                    }, 
                     fetchIssues: function (owner, repo, page) {
                         return $http({
                             method: 'GET',
-                            url: 'https://api.github.com/search/issues?q=state:open+repo:'+repo+'+user:'+owner+'&per_page=100&page='+page
-                            // url: 'https://api.github.com/repos/' + owner + '/' + repo + '/issues'
+                            // url: 'https://api.github.com/search/issues?q=state:open+repo:'+repo+'+user:'+owner+'&per_page=100&page='+page
+                            url: 'https://api.github.com/repos/' + owner + '/' + repo + '/issues&per_page=30&page='+page
                         });
                     },
                     filter24Hours: function (issues) {

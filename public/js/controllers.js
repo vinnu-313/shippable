@@ -3,6 +3,15 @@
 angular.module('shippableApp.controllers', ['shippableApp.services'])
         .controller('AppCtrl', ['$q', '$scope', 'ShippableService', function ($q, $scope, ShippableService) {
                 $scope.appName = "Shippable screening test ";
+                //Authorizing on load
+                ShippableService.authorize().then(function(response){
+                    console.info(response.data);
+                }, function(response){
+                    console.error(response);
+                });
+
+
+                // Gets called on click of show issues on the UI.
                 $scope.showIssues = function () {
                     $scope.results = false;
                     if ($scope.repoName.indexOf('github.com') === -1) {
@@ -11,8 +20,8 @@ angular.module('shippableApp.controllers', ['shippableApp.services'])
                         alert("Invalid github repo");
                     } else {
                         var ar = $scope.repoName.split('/');
-                        ShippableService.fetchIssues(ar[3], ar[4], 1).then(function (response) {
-                            var iterations = Math.ceil(response.data.total_count / 100);
+                        ShippableService.getIssueCount(ar[3], ar[4], 1).then(function (response) {
+                            var iterations = Math.ceil(response.data.total_count / 30);
                             $scope.issues = response.data.items;
                             var promises = [];
                             for(var i = 1; i < iterations; ++i){
