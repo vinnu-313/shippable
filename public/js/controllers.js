@@ -4,12 +4,9 @@ angular.module('shippableApp.controllers', ['shippableApp.services'])
         .controller('AppCtrl', ['$q', '$scope', 'ShippableService', function ($q, $scope, ShippableService) {
                 $scope.appName = "Shippable screening test ";
                 //Authorizing on load
-                ShippableService.authorize().then(function(response){
-                    console.info(response.data);
-                }, function(response){
-                    console.error(response);
-                });
-
+                ShippableService.authorize();//.then(function(response){
+                
+                $scope.results = true;
 
                 // Gets called on click of show issues on the UI.
                 $scope.showIssues = function () {
@@ -21,32 +18,27 @@ angular.module('shippableApp.controllers', ['shippableApp.services'])
                     } else {
                         var ar = $scope.repoName.split('/');
                         ShippableService.getIssueCount(ar[3], ar[4], 1).then(function (response) {
-                            var iterations = Math.ceil(response.data.total_count / 30);
-                            $scope.issues = response.data.items;
+                            var iterations = Math.ceil(response.data.open_issues_count / 30);
+                            $scope.issues = [];
                             var promises = [];
-                            for(var i = 1; i < iterations; ++i){
+                            for(var i = 0; i < iterations; ++i){
                                 promises.push(ShippableService.fetchIssues(ar[3], ar[4], i+1));
                             }
-                            if(promises.length){
-                                $q.all(promises).then(function(data){
-                                    for(i = 0; i< iterations-1; ++i){
-                                        console.log(data[i].data.items);
-                                        $scope.issues = $scope.issues.concat(data[i].data.items);
-                                    }
-                                    console.info($scope.issues.length);
-                                    $scope.last24Hours = ShippableService.filter24Hours($scope.issues);
-                                    $scope.last7Days = ShippableService.filterLast7Days($scope.issues);
-                                    $scope.moreThan7Days = ShippableService.filterMoreThan7Days($scope.issues);
-                                    $scope.results = true;
-                                }, function(error){
-                                    console.error(error);
-                                });    
-                            } else {
+                            $q.all(promises).then(function(data){
+                                for(i = 0; i< iterations; ++i){
+                                    console.log(data[i].data);
+                                    $scope.issues = $scope.issues.concat(data[i].data);
+                                }
+                                console.info('Including Pull requests : '+$scope.issues.length);
+                                $scope.issues = ShippableService.filterIssues($scope.issues);
+                                console.info('Excluding Pull requests : '+$scope.issues.length);
                                 $scope.last24Hours = ShippableService.filter24Hours($scope.issues);
                                 $scope.last7Days = ShippableService.filterLast7Days($scope.issues);
                                 $scope.moreThan7Days = ShippableService.filterMoreThan7Days($scope.issues);
                                 $scope.results = true;
-                            }
+                            }, function(error){
+                                console.error(error);
+                            });    
                         }, function (response) {
                             console.error(response);
                         });

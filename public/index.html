@@ -10,21 +10,19 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="stylesheets/main.css">
         <style>
-        .table-block{width: 90%;margin: 0 auto;}
-        .label-primary{display: block;width: 90%;margin: 10px auto;padding: 8px;font-size: 16px;}
-        .input-blok{display: inline-block;width: 70%;padding: 5px;border-radius: 4px;box-shadow: none;border: 1px solid #ccc;}
-        .input-wrap{text-align: center;margin: 15px 0;}
         </style>
     </head>
     <body ng-controller="AppCtrl">
+        <div class="loading" ng-hide="results">Loading&#8230;</div>
         <h1 ng-bind="appName" class="label label-primary"></h1>
         <div class="input-wrap">
              <input ng-model="repoName" class="input-blok" placeholder="github url" />
             <input type="button" value="Show Issues" ng-click="showIssues()" class="btn btn-warning"/>
         </div>
        <div class="table-block">
-            <table ng-show="results" class="table table-striped table-bordered">
+            <table ng-show="results && issues.length" class="table table-striped table-bordered">
                 <tr>
                     <th>Total number of open issues</th>
                     <td>{{issues.length}}</td>
